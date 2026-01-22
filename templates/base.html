@@ -1,0 +1,38 @@
+{% block head %}
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="../static/style.css">
+        <link rel="icon" href="/static/img/favicon.ico" type="image/x-icon" />
+    </head> 
+    <body>
+{% endblock %}
+
+            <nav id="navbar">
+                <a href="/">
+                        <img id="bookkeeperLogo" src="/static/img/bookkeeper.png"/>
+                </a>
+                <a href="/collection">
+                    <div class="navbuttons">
+                        Your Collection
+                    </div>
+                </a>
+                <a href="/about">
+                    <div class="navbuttons">
+                        About
+                    </div>
+                </a>
+            </nav>
+
+        {% block body %} 
+        {% endblock %}
+
+        <footer>
+            <a href="/">
+                        <img id="bookkeeperLogo" src="/static/img/bookkeeper.png"/>
+                </a>
+        </footer>
+    </body>
+</html>

@@ -1,0 +1,29 @@
+{% extends 'base.html'%}
+
+{% block head %}
+<title>Home | Bookkeeper</title>
+<link rel="stylesheet" href="../static/style.css">
+<link rel="icon" href="/static/img/favicon.ico" type="image/x-icon" />
+
+{% endblock %}
+{% block body %}
+    
+
+    <div id="pageWrap">
+        <div id="contentWrap">
+            <div id="actionButtons1" class="actionButtons dashed-border">
+                <a class="btn blueBtn" href="/collection">Collection</a>
+                <a class="btn purpleBtn" href="{{url_for('logout')}}">LOG OUT</a>
+            </div>
+            <div id="characterContent" class="dashed-border">
+                <h1> Welcome, {{user.username}}!</h1>
+
+            </div>
+            <div id="actionButtons2" class="actionButtons dashed-border">
+                <span>
+                    <a class="btn blueBtn"href="/{{user.username}}">PROFILE</a>
+                </span>
+            </div>
+        </div>
+    </div>
+{% endblock %}

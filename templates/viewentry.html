@@ -1,0 +1,71 @@
+
+{% extends 'base.html' %}
+{% block head %}
+    <title>{{entry['name']}} | {{user.username}}</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="icon" href="/static/img/favicon.ico" type="image/x-icon" />
+{% endblock %}
+{% block body %}
+    <div id="pageWrap">
+        <div id="contentWrap">
+            <div id="actionButtons1" class="actionButtons dashed-border">
+                <a class="btn blueBtn" href="/collection">Back to Collection</a>
+                <a class="btn purpleBtn" href="{{url_for('logout')}}">LOG OUT</a>
+            </div>
+            <div id="characterContent" class="dashed-border">
+                <div id="titleAndIcon" class="row">
+                    <img src="{{entry['icon_url']}}">
+                    <div>
+                        <h1>{{entry['name']}}</h1>
+                    </div>
+                </div>
+                <div id="viewEntryInformation">
+                    <div><p>Created on {{time_object.strftime("%m-%d-%Y")}}</p></div>
+                    <div class="row viewCategoryRow">
+                        <p><b>Category:&nbsp;&nbsp;</b>
+                        <div class="categoryTag viewEntryCategoryTag">
+                            <h5 style="background-color:{{user.categories[entry['category']]}}; color:#ffffff">{{entry['category']}}</h5>
+                        </div></p>
+                    </div>
+                    <div>
+                        <p> <b>Tags:  </b>
+                        {% if entry['tags'] | length > 0 %}
+                            {% for tag in entry['tags'] %}
+                                {% if tag == entry['tags'][-1]%}
+                                    {{tag}}
+                                {% else %}
+                                    {{tag}}, 
+                                {% endif %}
+                            {% endfor %}
+                        {% else %}
+                        None
+                        {% endif %}
+                        </p>
+                        <br>
+                    </div>
+                    <hr>
+                </div>
+                {% for item in entry['widgets'] %}
+                    <div class="widget">
+                        {% if item['type'] == "text" %}
+                            <p class="widget-align-{{item['params']['align']}}">{{item['content'] | safe }}</p>
+                        {% elif item['type'] == "image" %}
+                            <img src="{{item['content']}}" alt="{{item['params']['alt']}}" class="widget-align-{{item['params']['align']}}">
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+            <div id="actionButtons2" class="actionButtons dashed-border">
+                <span>
+                    <a class="btn blueBtn" href="/view/{{user.username}}-{{user.collection[prevPageIndex]['id']}}">PREV</a>
+                    <a class="btn blueBtn" href="/view/{{user.username}}-{{user.collection[nextPageIndex]['id']}}">NEXT</a>
+                </span>
+                <span>
+                    <a class="btn blueBtn" href="/edit/{{user.username}}-{{entry['id']}}">EDIT</a>
+                    <a class="btn blueBtn redBtn" href="/delete/{{user.username}}-{{entry['id']}}"><b>DELETE</b></a>
+                </span>
+            </div>
+        </div>
+    </div>
+    
+{% endblock %}

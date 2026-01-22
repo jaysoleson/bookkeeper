@@ -1,0 +1,411 @@
+/* GEN ########################################################## */
+@import url("https://use.typekit.net/ztg8akv.css");
+
+
+html {
+    font-family:'titillium-web', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #e9e7e3;
+    color:#111717;
+}
+
+body {
+    margin: 0px;
+}
+
+a {
+    text-decoration: none;
+}
+
+img {
+    object-fit: cover;
+}
+
+html {
+    background-image: url("https://dl.dropboxusercontent.com/scl/fi/n738vfr27jv9xx10y6ozi/gaze_street.png?rlkey=ah62128lovsx55q6qj8b63eml&st=62laq8xi&dl=0");
+    background-size: cover;
+    background-attachment: fixed;
+    min-height: 100vh;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+/* BUTTONS */
+
+.btn {
+    text-decoration: none;
+    transition: 0.3s ease;
+    padding: 8px 12px;
+    border-radius: 8px;
+    text-align: center;
+    border: none;
+    font-weight: bold;
+    margin: 5px;
+}
+.btn:hover {
+    cursor: pointer;
+}
+
+.blueBtn {
+    background-color: #9ac8c8;
+    color:#316969
+}
+.blueBtn:hover {
+    background-color: #6fa6a6;
+}
+
+.redBtn {
+    background-color: #d87f7f;
+    color: #7d2626
+}
+.redBtn:hover {
+    background-color: #c76a6a;
+}
+.greenBtn {
+    background-color: #a9bd7c;
+    color: #445021;
+}
+.greenBtn:hover {
+    background-color: #89a652;
+}
+
+.purpleBtn {
+    background-color: #b77fc9;
+    color: #543464
+}
+.purpleBtn:hover {
+    background-color: #995cad;
+}
+/* ########### */
+
+/* TEXT INPUT */
+.textInput {
+    padding: 5px;
+    border: 1px dashed black;
+}
+
+.largeTextInput {
+    width: 100%;
+    height: 100px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    border: 1px dashed black;
+    padding: 10px;
+}
+.largeTextInput:active {
+    border: 1px dashed #89a652;
+
+}
+/* #### */
+
+#bookkeeperLogo {
+    height: 80%;
+    margin: 5px 40px 5px 10px;
+    display: flex;
+    justify-self: center;
+}
+#navbar {
+    display: flex;
+    background-color: #9ac8c8;
+    height: 90px;
+    top: 0;
+    position: sticky;
+}
+
+#navbar a .navbuttons {
+    justify-self: center;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    transition: 0.3s ease;
+    padding: 0px 20px;
+}
+#navbar a .navbuttons:hover {
+    background-color: #6fa6a6;
+}
+
+#navbar a {
+    color: #316969;
+}
+
+footer {
+    height: 190px;
+    background-color: #111717;
+    margin-top: 40px;
+    padding-top: 15px;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+}
+
+
+/* LOGIN PAGE #################################################### */
+/* index.html */
+#loginPanel {
+    display: flex;
+    justify-self: center;
+    background-color: #efece8;
+    flex-direction: column;
+    margin: 50px 20px;
+    padding: 20px;
+    border-radius: 30px;
+    box-shadow: 5px 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+
+
+/* INDIVIDUAL ENTRY PAGE ################################################### */ 
+/* viewentry.html */
+
+/* WIDGETS */
+
+.widget {
+    display: grid;
+    /* grid-template-columns: 1fr 1fr 1fr; */
+}
+.widget .widget-align-left {
+    /* grid-column-start: 1;
+    grid-column-end: 1; */
+    text-align: left;
+}
+.widget .widget-align-centre {
+    /* grid-column-start: 2;
+    grid-column-end: 2; */
+    text-align: center;
+}
+.widget .widget-align-right {
+    /* grid-column-start: 3;
+    grid-column-end: 3; */
+    text-align: right;
+}
+
+.widget img {
+    max-width: 100%;
+}
+
+#titleAndIcon {
+    display: flex;
+    margin: 15px 0px;
+}
+
+#viewEntryInformation div > * {
+    margin: 5px 0px;
+}
+
+.viewCategoryRow {
+    align-items: center;
+}
+
+#titleAndIcon img {
+    width: 130px;
+    height: 130px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+#titleAndIcon div {
+    margin: 10px 20px;
+    text-align: left;
+}
+
+#titleAndIcon h1, #titleAndIcon p {
+    margin: 10px 0px;
+}
+#contentWrap {
+    display: flex;
+    justify-self: center;
+    width: 1200px;
+    max-width: 90%;
+    margin-top: 20px;
+}
+
+.dashed-border {
+    border: dashed 1px #111717;
+    padding: 10px 25px;
+    margin: 10px;
+    background-color: #efece8;
+    border-radius: 5px;
+}
+
+#characterContent {
+    flex-basis: 70%;
+}
+
+.actionButtons {
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-basis: 15%;
+    flex-wrap: wrap;
+}
+.actionButtons span {
+    display: flex;
+    flex-direction: column;
+}
+.actionButtons .btn {
+    margin: 10px;
+}
+
+#editEntryForm {
+    display: flex;
+    flex-direction: column;
+    justify-self: center;
+    text-align: center;
+}
+
+#addWidgetButton {
+    margin: 10px 0px;
+}
+
+/* mobile */
+@media (max-aspect-ratio: 4/3) {
+  #contentWrap {
+    flex-direction: column-reverse;
+    width: 90vw;
+    }
+    .actionButtons {
+        flex-direction: row;
+        justify-content: center;
+    }
+    .actionButtons span {
+        flex-direction: row;
+        justify-content: center;
+    }
+}
+/* FULL COLLECTION PAGE ########################################## */
+/* collection.html */
+
+#displayToggles {
+    justify-content: space-between;
+    margin: 10px;
+}
+
+#newEntryWrap {
+    display: flex;
+    flex-direction: column;
+    justify-self: center;
+    margin: 20px;
+}
+
+/* LIST DISPLAY */
+#collectionTableList {
+    border-spacing: 0px;
+    width: 100%;
+    border: 1px dashed #344646;
+    /* box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2); */
+}
+#collectionTableList tr:nth-child(even) {
+    background-color: #e9e7e3;
+}
+#collectionTableList tr:nth-child(odd) {
+    background-color: #ffffff;
+}
+
+#collectionTableList td {
+    padding: 10px;
+}
+#collectionTableList img {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 5px;
+    justify-self: center;
+}
+.categoryTag {
+    display: flex;
+    margin: 5px;
+}
+.categoryTag h5 {
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-weight: 200;
+    text-align: center;
+}
+.categoryTag + .collectionPage h5:hover {
+    cursor: pointer;
+}
+
+/* remove margins on these ones */
+
+#deleteCategoryForm .categoryTag h5, #deleteTagForm .categoryTag h5 {
+    margin: 0 auto;
+}
+
+/* GRID DISPLAY */
+
+#collectionTableGrid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.collectionTableGridItem {
+    margin: 10px;
+    width: 150px;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.3);
+}
+.collectionTableGridItem p, h4 {
+    margin: 0px;
+}
+.collectionTableGridItem img {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto;
+    border-radius: 5px;
+}
+.collectionTableGridItem .greenBtn {
+    margin-top: 15px;
+}
+
+/* ---- */
+
+#selectDefaultImageWrap {
+    display: flex;
+    flex-wrap: wrap;
+}
+.selectDefaultImage {
+    display: flex;
+    flex-direction: column-reverse;
+    margin: 10px;
+}
+.selectDefaultImage img {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+/* PROFILE */
+
+#profileCategoryListWrap {
+    display: flex;
+    flex-direction: column;
+}
+#profileCategoryListWrap {
+    margin-bottom: 0px;
+}
+
+.colourpicker {
+    width: 30px;
+    height: 30px;
+    vertical-align: middle;
+    margin: 0px 5px;
+}
+
+.categoryTagWrap {
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.selectedCategory {
+    outline: 3px solid #316969;
+    border-radius: 5px;
+}

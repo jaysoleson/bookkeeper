@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Edit Profile | Bookkeeper</title>
+<link rel="stylesheet" href="../static/style.css">
+<link rel="icon" href="/static/img/favicon.ico" type="image/x-icon" />
+
+
+{% endblock %}
+{% block body %}
+
+<div id="pageWrap">
+        <div id="contentWrap">
+            <div id="actionButtons1" class="actionButtons dashed-border">
+                <a class="btn blueBtn" href="/collection">Back to Collection</a>
+                <a class="btn purpleBtn" href="{{url_for('logout')}}">LOG OUT</a>
+            </div>
+            <div id="characterContent" class="dashed-border">
+                <div id="titleAndIcon" class="row">
+                    <img src="https://dl.dropboxusercontent.com/scl/fi/4ozl1wdskf3o46qmehk2o/putwr.jpg?rlkey=iebhl5zm4qaqzoj33705adhot&st=lpcmv26j&dl=0">
+                    <div>
+                        <h1>{{user.username}}</h1>
+                        <p style="color:#316969;">{{profile_subtitle}}</p>
+                    </div>
+                </div>
+                <p id="currentBio">{{user.profile_info['bio'] | safe }}</p>
+                <form action="" method="POST" id="editBioForm" hidden>
+                    <textarea name="editBio" id="editBio" class="textInput largeTextInput">{{user.profile_info['bio']}}</textarea>
+                    <p>Basic HTML formatting, such <b>&lt;b&gt; &lt;/b&gt;</b>, <i>&lt;i&gt; &lt;/i&gt;</i>, <u>&lt;u&gt; &lt;/u&gt;</u>, and &lt;br&gt; is allowed for text.</p>
+                    <br><br>
+                    <input type="submit" value="Save Bio" name="saveBioBtn" id="saveBioBtn" onclick="switchToEditMode" class="btn greenBtn" />
+                </form>
+                <hr>
+                <br>
+                
+                <div class="profileCategoryListWrap">
+                    <div>
+                        <h3>{{user.username}}'s Categories</h3>
+                    </div>
+                    <div class="row">
+                        <form action="/{{user.username}}" method="POST" name="deleteCategoryForm" id="deleteCategoryForm">
+                        {% if user.categories | length > 1 %}
+                            <div class="row">
+                                {% for category in user.categories.items() %}
+                                    {% if category[0] != "Unsorted" %}
+                                    <div id="{{category[0]}}" class="categoryTagWrap">
+                                        <div class="categoryTag">
+                                            <input type="checkbox" class="deleteCategory" name= "{{category[0]}}" value="{{category[0]}}" id="checkbox-{{category[0]}}"
+                                            onclick = "selectEditCategory('{{category[0]}}')" hidden>
+                                            
+                                            <input type="color" class="colourpicker deleteCategory" id="editCategoryColour" name="editCategoryColour-{{category[0]}}" value="{{category[1]}}" hidden/>
+                                                <h5
+                                                style= "background-color:{{category[1]}};
+                                                        color:#ffffff;">
+                                                    {{category[0]}}
+                                                </h5>
+                                            </input>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                            <input type="submit" value="Delete Selected" name="deleteCategoriesBtn" id="deleteCategoriesBtn" class="btn redBtn" hidden/>
+                            <input type="submit" value="Save" name="changeColourBtn" id="changeColourBtn" class="btn greenBtn" hidden/>
+                        {% else %}
+                            <p id="nocategories">No categories.</p>
+                        {% endif %}
+                        </form>
+                    </div>
+                </div>
+                
+                <form action="/{{user.username}}" method="POST" name="submitNewCategoryForm" id="submitNewCategoryForm" hidden>
+                    <input type="text" name="submitNewCategory" id="submitNewCategory" class="textInput" placeholder="Add a category"/>
+                    <input type="color" class="colourpicker" id="submitNewCategoryColour" name="submitNewCategoryColour" value="#ffffffff"/>
+                    <input type="submit" value="Submit" id="submitNewCategoryBtn" onclick="switchToEditMode" class="btn greenBtn" />
+                </form>
+                <hr>
+                
+                <h3>{{user.username}}'s tags:</h3>
+                <div id="userTagWrap">
+                    <form action="/{{user.username}}" method="POST" name="deleteTagForm" id="deleteTagForm">
+                        {% if user.tags | length > 0 %}
+                        <div class="row">
+                            {% for tag in user.tags %}
+                            <div class="categoryTag">
+                                <input type="checkbox" class="deleteCategory" name= "{{tag}}" value="{{tag}}" hidden>
+                                    <h5
+                                    style= "background-color:#316969;
+                                            color:#ffffff;">
+                                        {{tag}}
+                                    </h5>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <input type="submit" value="Delete Selected" name="deleteTagsBtn" id="deleteTagsBtn" class="btn redBtn" hidden/>
+                        {% else %}
+                        <p id ="notags">No tags.</p>
+                        {% endif %}
+                    </form>
+                </div>
+
+                <form action="/{{user.username}}" method="POST" name="addNewTagsForm" id="addNewTagsForm" hidden>
+                    <input type="text" name="submitNewTag" id="submitNewTag" class="textInput" placeholder="Add a tag"/>
+                    <input type="submit" class="btn greenBtn" value="Submit" name="submitTags">
+                    <h6>Separate different tags with a comma to add several at once.</h6>
+                </form>
+                <hr>
+
+                <br><br><br>
+                <a class="btn blueBtn" href="/collection">View {{user.username}}'s Collection</a>
+                <br><br><br>
+
+            </div>
+            <div id="actionButtons2" class="actionButtons dashed-border">
+                <span>
+                    <a class="btn purpleBtn" id="editProfileBtn" onclick="switchToEditMode()">EDIT</a>
+                    <a class="btn purpleBtn" id="regProfileBtn" onclick = "leaveEditMode()" hidden>BACK</a>
+                </span>
+            </div>
+        </div>
+    </div>
+<script src="../static/scripts/collection.js"></script>
+
+{% endblock %}

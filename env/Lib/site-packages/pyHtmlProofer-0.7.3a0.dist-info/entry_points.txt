@@ -1,0 +1,3 @@
+[console_scripts]
+pyhtmlproofer=pyhtmlproofer.__main__:main
+

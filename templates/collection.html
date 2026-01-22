@@ -1,0 +1,231 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>{{user.username}}'s Collection</title>
+<link rel="stylesheet" href="../static/style.css">
+<link rel="icon" href="/static/img/favicon.ico" type="image/x-icon" />
+
+{% endblock %}
+
+{% block body %}
+    <!-- some shit i stole from stackoverflow -->
+    <!-- https://stackoverflow.com/questions/42601478/flask-calling-python-function-on-button-onclick-event -->
+    <!-- will allow me to run a python function onclick-->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript">
+            // CATEGORY SORT
+            let sort_dict = {
+                "#categorySortBtn": "/sortCollectionByCategory",
+                "#alphSortBtn": "/sortCollectionByAlphabet",
+                "#timeSortBtn": "/sortCollectionByTime"
+            }
+
+            for (const [key, value] of Object.entries(sort_dict)) {
+                $(function() {
+                $(key).on('click', function(e) {
+                    e.preventDefault()
+                    $.getJSON(value,
+                        function(data) {
+                    });
+                    return false;
+                });
+                });
+            }
+
+            let view_dict = {
+                "#gridDisplayBtn": "/gridView",
+                "#listDisplayBtn": "/listView"
+            }
+
+            for (const [key, value] of Object.entries(view_dict)) {
+                $(function() {
+                $(key).on('click', function(e) {
+                    e.preventDefault()
+                    $.getJSON(value,
+                        function(data) {
+                    });
+                    return false;
+                });
+                });
+            }
+    </script>
+
+    <div id="pageWrap">
+        <div id="contentWrap">
+            <div id="actionButtons1" class="actionButtons dashed-border">
+                <a class="btn blueBtn" href="#">???</a>
+                <a class="btn purpleBtn" href="{{url_for('logout')}}">LOG OUT</a>
+            </div>
+            <div id="characterContent" class="dashed-border">
+                    {% if user['collection'] | length < 1 %}
+                    <p> {{user.username}} has not started a collection yet.</p>
+                    {% else %}
+
+                    <h1>{{user.username}}'s Collection</h1>
+                <!-- LIST DISPLAY -->
+                <div id="displayToggles" class="row">
+                    <div id="toggleDisplayButtons">
+                        {% if user.profile_info['collectionView'] == "list" %}
+                            <button class="btn blueBtn" id="gridDisplayBtn" onclick="gridBtnClicked()">Grid</button>
+                            <button class="btn greenBtn" id="listDisplayBtn" onclick="listBtnClicked()">List</button>
+                        {% else %}
+                            <button class="btn greenBtn" id="gridDisplayBtn" onclick="gridBtnClicked()">Grid</button>
+                            <button class="btn blueBtn" id="listDisplayBtn" onclick="listBtnClicked()">List</button>
+                        {% endif %}
+                    </div>
+                    <div id = "sortToggles">
+                        {% for sort in [("category", "Category"), ("alph", "A-Z"), ("time", "Time")] %}
+                            {% if sort[0] == sorted_by %}
+                                <button type="button" class="btn greenBtn" id="{{sort[0]}}SortBtn" onclick="{{sort[0]}}SortBtnClicked()">{{sort[1]}}</button>
+                            {% else %}
+                                <button type="button" class="btn blueBtn" id="{{sort[0]}}SortBtn" onclick="{{sort[0]}}SortBtnClicked()">{{sort[1]}}</button>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+
+                {% if user.profile_info['collectionView'] == "list" %}
+                    <table id = "collectionTableList">
+                {% else %}
+                    <table id = "collectionTableList" hidden>
+
+                {% endif %}
+                    {% for entry in user['collection'] %}
+                    <tr> 
+                        <td><img src="{{entry['icon_url']}}"></td>
+                        <td> {{entry['name']}} </td>
+                        <td class="categoryTag collectionPage">
+                            <a href="/{{user.username}}">
+                                <h5 class=""
+                                style= "background-color:{{user['categories'][entry['category']]}};
+                                        color:#ffffff;">
+                                {{entry['category']}}</h5>
+                            </a>
+                        </td>
+                        <td> <a class="greenBtn btn" href="/view/{{user.username}}-{{entry['id']}}">VIEW</a></td>
+                    </tr>
+                    {% endfor %}
+                </table>
+
+                <!-- GRID DISPLAY -->
+                {% if user.profile_info['collectionView'] == "list" %}
+                <div id = "collectionTableGrid" style="display:none;">
+                    
+                {% else %}
+                <div id = "collectionTableGrid">
+                
+                {% endif %}
+                    {% for entry in user['collection'] %}
+                        <div class="collectionTableGridItem">
+                            <img src="{{entry['icon_url']}}">
+                            <h4>{{entry['name']}}</h4>
+                            <p style="color:{{user['categories'][entry['category']]}};"> {{entry['category']}} </p>
+                            <a class="greenBtn btn" href="/view/{{user.username}}-{{entry['id']}}">VIEW</a>
+                        </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                <br>
+                <hr>
+                <div id="newEntryWrap">
+                    <h3>Add a new entry</h3>
+                    <form action="/collection" method="POST">
+                        <!-- TITLE/NAME -->
+                        <label for="submitEntryTitle">Title *</label><br>
+                        <input type="text" name="submitEntryTitle" id="submitEntryTitle" class="textInput"/>
+                        <br>
+                        <br>
+                        <!-- DESCRIPTION -->
+                        <label for="submitEntryDesc">Description</label>
+                        <textarea name="submitEntryDesc" id="submitEntryDesc" class="textInput largeTextInput"></textarea>
+
+                        <p>Align Text</p>
+                        {% for alignment in ["left", "centre", "right"] %}
+                            {% if alignment == "left" %}
+                                <input type="radio" id="align-{{alignment}}" name="align" value="{{alignment}}" checked>
+                            {% else %}
+                                <input type="radio" id="align-{{alignment}}" name="align" value="{{alignment}}">
+                            {% endif %}
+                            
+                            <label for="widget-{{alignment}}">{{alignment.capitalize()}}</label>
+                        {% endfor %}
+                        
+                        <br>
+                        <br>
+                        <!-- CUSTOM ICON URL -->
+                        <label for="submitEntryIcon">Icon URL</label> <br>
+                        <input type="text" name="submitEntryIcon" id="submitEntryIcon" class="textInput" />
+                        
+                        <!-- DEFAULT ICON SELECT -->
+                        <br>
+                        <br>
+                        
+                        <label for="selectDefaultImageWrap">Or choose a default image:</label> <br>
+                        <div id="selectDefaultImageWrap">
+                            {% for image in defaultImages %}
+                            <div class="selectDefaultImage">
+                                {% if image['alt'] == "Gen" %}
+                                    <input
+                                        type="radio"
+                                        id={{image['id']}}
+                                        name="defaultImage"
+                                        value={{image['src']}}
+                                        checked />
+                                {% else %}
+                                    <input
+                                        type="radio"
+                                        id={{image['id']}}
+                                        name="defaultImage"
+                                        value={{image['src']}} />
+                                {% endif %}
+                                <img 
+                                    src={{image['src']}}
+                                    alt={{image['alt']}} />
+                            </div>
+                            {% endfor %}
+                        </div>
+
+                        <!-- CATEGORY -->
+                        <p><label for="submitEntryCategory">Category</label></p>
+                        <select name="submitEntryCategory" id="submitEntryCategory">
+                        {% for category in user['categories'].items() %}
+                            {% if category[0] == "Unsorted" %}
+                                <option style="color:{{category[1]}};" value="{{category[0]}}" selected>{{category[0]}}</option>
+                            {% else %}
+                                <option style="color:{{category[1]}};" value="{{category[0]}}">{{category[0]}}</option>
+                            {% endif %}
+                        {% endfor %}
+                        </select>
+
+                        <!-- TAGS -->
+                        {% if user.tags | length > 0 %}
+                        <p><label for="submitEntryTags">Tags</label></p>
+                            {% for tag in user.tags %}
+                                <input type="checkbox" name="{{tag}}" id="{{tag}}" value="{{tag}}"/>
+                                <label for="{{tag}}">{{tag}}</label>
+                            {% endfor %}
+                        {% else %}
+                        <p><label for="notags">Tags</label></p>
+                        <p id="notags">You have no tags. Go to your profile to add some!</p>
+                        {% endif %}
+
+                        <br><br>
+                        <!-- SUBMIT ENTRY-->
+                        <input type="submit" value="Submit Entry" id="submitEntryTitleBtn" class="btn greenBtn" />
+                    </form>
+                </div>
+            </div>
+            <div id="actionButtons2" class="actionButtons dashed-border">
+                <span>
+                    <a class="btn blueBtn"href="#">???</a>
+                    <a class="btn blueBtn"href="/{{user.username}}">PROFILE</a>
+                </span>
+                <span>
+                    <a class="btn blueBtn"href="#">???</a>
+                </span>
+            </div>
+        </div>
+    </div>
+
+<script src="../static/scripts/collection.js"></script>
+{% endblock %}

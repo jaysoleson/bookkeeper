@@ -1,0 +1,164 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Edit {{entry['name']}}</title>
+<link rel="stylesheet" href="../static/style.css">
+<link rel="icon" href="/static/img/favicon.ico" type="image/x-icon" />
+
+{% endblock %}
+
+{% block body %}
+
+
+<div id="pageWrap">
+        <div id="contentWrap">
+            <div id="actionButtons1" class="actionButtons dashed-border">
+                <a class="btn blueBtn"href="/view/{{user.username}}-{{entry['id']}}">BACK</a>
+                <a class="btn purpleBtn" href="{{url_for('logout')}}">LOG OUT</a>
+            </div>
+            <div id="characterContent" class="dashed-border">
+                <form action="/edit/{{user.username}}-{{entry['id']}}" method="POST" name="addNewEntryForm">
+                    <!-- TITLE/NAME -->
+                        <label for="submitEntryTitle"><h3>Title *</h3></label><br>
+                        <input
+                            type="text"
+                            name="submitEntryTitle"
+                            id="submitEntryTitle"
+                            class="textInput"
+                            value="{{entry['name']}}"
+                            >
+                        <br>
+                        <br>
+                        <!-- WIDGETS -->
+                        <h3>Widgets</h3>
+                        <div id="editWidgets">
+                            {% for item in entry['widgets'] %}
+                                <div>
+                                    <div class="row">
+                                        <button title="Delete widget" type="submit" class="btn redBtn" name="deleteWidget-{{entry['widgets'].index(item)}}">-</button>
+                                        <h4>{{item['type'].capitalize()}}</h4>&nbsp;&nbsp;
+                                    </div>
+                                    <!-- CONTENT-->
+                                    {% if item['type'] == "text" %}
+                                        <textarea name="widgetEditContent-{{entry['widgets'].index(item)}}" id="widgetEdit-{{entry['widgets'].index(item)}}" class="textInput largeTextInput">{{item['content']}}</textarea>
+                                    {% elif item['type'] == "image" %}
+                                        <input type="text" name="widgetEditContent-{{entry['widgets'].index(item)}}" value="{{item['content']}}"/>
+                                    {% endif %}
+
+                                    <div class="row">
+                                    {% for alignment in ["left", "centre", "right"] %}
+                                        {% if alignment == item['params']['align'] %}
+                                            <input type="radio" id="edit-widget-{{alignment}}" name="widgetEditAlign-{{entry['widgets'].index(item)}}" value="{{alignment}}" checked>
+                                        {% else %}
+                                            <input type="radio" id="edit-widget-{{alignment}}" name="widgetEditAlign-{{entry['widgets'].index(item)}}" value="{{alignment}}">
+                                        {% endif %}
+                                        
+                                        <label for="widget-{{alignment}}">{{alignment.capitalize()}}</label>
+                                        <br>
+                                    {% endfor %}
+                                    </div>
+                                </div>
+                                <br><br>
+                            {% endfor %}
+                            <p><button title="Add a widget" type="button" id="addWidgetButton" onclick = "addNewWidget()" class="btn blueBtn">+</button></p>
+                            <p><button title="Cancel new widget" type="button" id="cancelNewWidgetButton" onclick = "cancelNewWidget()" class="btn redBtn" hidden>-</button></p>
+
+                            <!-- STUFF TO ADD A WIDGET-->
+                            <div id = "newWidgetDiv" hidden>
+                                <p>Type</p>
+                                <div>
+                                    <input type="radio" id="widget-text" name="new-widget-type" onclick="showTextWidgetOptions()" value="text" checked>
+                                    <label for="widget-text">Text</label>
+                                    
+                                    <input type="radio" id="widget-image" name="new-widget-type" onclick="showImageWidgetOptions()" value="image">
+                                    <label for="widget-text">Image</label>
+                                </div>
+                                <div>
+                                    <p>Content *</p>
+                                    <textarea id="newWidgetContent" name="new-widget-text-content" class="textInput largeTextInput"></textarea>
+                                    <p>
+                                    <input type="text" id="newWidgetURL" name="new-widget-url-content" placeholder="Image URL" hidden/>
+                                    </p>
+                                    <p>
+                                    <input type="text" id="newWidgetAlt" name="new-widget-alt" placeholder="Image alt text" hidden/>
+                                    </p>
+                                </div>
+
+                                <div>
+                                <p>Alignment</p>
+                                    <input type="radio" id="widget-left" name="new-widget-align" value="left" checked>
+                                    <label for="widget-left">Left</label>
+                                    <input type="radio" id="widget-centre" name="new-widget-align" value="centre">
+                                    <label for="widget-centre">Centre</label>
+                                    <input type="radio" id="widget-right" name="new-widget-align" value="right">
+                                    <label for="widget-right">Right</label>
+                                </div>
+                            </div>
+
+                        </div>
+                        <hr>
+                        
+                        <br>
+                        <br>
+                        <!-- CUSTOM ICON URL -->
+                        <label for="submitEntryIcon">Icon URL</label> <br>
+                        <input type="text" name="submitEntryIcon" id="submitEntryIcon" class="textInput" value="{{entry['icon_url']}}"/>
+                        
+                        <!-- DEFAULT ICON SELECT -->
+                        <br>
+                        <br>
+                        
+                        <label for="selectDefaultImageWrap">Or choose a default image. Icon URL must be empty.</label> <br>
+                        <div id="selectDefaultImageWrap">
+                            {% for image in defaultImages %}
+                            <div class="selectDefaultImage">
+                                {% if image['src'] == entry['icon_url'] %}
+                                    <input
+                                        type="radio"
+                                        id={{image['id']}}
+                                        name="defaultImage"
+                                        value={{image['src']}}
+                                        checked />
+                                
+                                {% else %}
+                                    <input
+                                        type="radio"
+                                        id={{image['id']}}
+                                        name="defaultImage"
+                                        value={{image['src']}} />
+                                {% endif %}
+                                <img 
+                                    src={{image['src']}}
+                                    alt={{image['alt']}} />
+                            </div>
+                            {% endfor %}
+                        </div>
+
+                        <!-- CATEGORY -->
+                        <p><label for="submitEntryCategory">Category</label></p>
+                        <select name="submitEntryCategory" id="submitEntryCategory">
+                        {% for category in user.categories.items() %}
+                            {% if category[0] == entry.category %}
+                                <option style="color:{{category[1]}};" value="{{category[0]}}" selected>{{category[0]}}</option>
+                            {% else %}
+                                <option style="color:{{category[1]}};" value="{{category[0]}}">{{category[0]}}</option>
+                            {% endif %}
+                        {% endfor %}
+                        </select>
+
+                        <br><br>
+                        <!-- SUBMIT ENTRY-->
+                        <input type="submit" value="Save Changes" id="submitEntryTitleBtn" class="btn greenBtn" />
+                </form>
+            </div>
+            <div id="actionButtons2" class="actionButtons dashed-border">
+                <span>
+                    <a class="btn redBtn" href="/delete/{{user.username}}-{{entry['id']}}"><b>DELETE</b></a>
+                </span>
+            </div>
+        </div>
+    </div>
+
+<script src="../static/scripts/collection.js"></script>
+
+{% endblock %}

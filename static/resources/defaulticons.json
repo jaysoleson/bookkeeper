@@ -1,0 +1,42 @@
+[
+    {
+        "src": "../static/img/icons/gen.png",
+        "id": "defaultImageGen",
+        "alt": "Gen"
+    },
+    {
+        "src": "../static/img/icons/man.png",
+        "id": "defaultImageMan",
+        "alt": "Man"
+    },
+    {
+        "src": "../static/img/icons/woman.png",
+        "id": "defaultImageWoman",
+        "alt": "Woman"
+    },
+    {
+        "src": "../static/img/icons/cat.png",
+        "id": "defaultImageCat",
+        "alt": "Cat"
+    },
+    {
+        "src": "../static/img/icons/dog.png",
+        "id": "defaultImageDog",
+        "alt": "Dog"
+    },
+    {
+        "src": "../static/img/icons/heart.png",
+        "id": "defaultImageHeart",
+        "alt": "Heart"
+    },
+    {
+        "src": "../static/img/icons/house.png",
+        "id": "defaultImageHouse",
+        "alt": "House"
+    },
+    {
+        "src": "../static/img/icons/moon.png",
+        "id": "defaultImageMoon",
+        "alt": "Moon"
+    }
+]

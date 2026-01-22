@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Home | Bookkeeper</title>
+<link rel="stylesheet" href="../static/style.css">
+<link rel="icon" href="/static/img/favicon.ico" type="image/x-icon" />
+
+
+{% endblock %}
+{% block body %}
+
+<div id="loginPanel">
+    <h1>Welcome to Bookkeeper!</h1>
+    <p>Log in or create an account below!</p>
+
+    <div>
+        <form action="{{url_for('login')}}" method="POST" id="loginForm">
+            <input
+                type="text"
+                name="username"
+                id="username"
+                placeholder="Username"
+                class="textInput loginInput"
+                />
+            <input
+                type="text"
+                name="password"
+                id="password"
+                placeholder="Password"
+                for="password"
+                class="textInput loginInput"
+                />
+            <input
+                type="submit"
+                value="Login"
+                class="btn blueBtn"
+                onclick="setActionForm('login')"
+                />
+            <input
+                type="button"
+                value="Register"
+                class="btn blueBtn greenBtn"
+                onclick="setActionForm('register')"
+                />
+        </form>
+    </div>
+</div>
+
+
+<script>
+    function setActionForm(action) {
+        let form = document.getElementById("loginForm");
+    
+        if (action === "login") {
+            form.action = "{{url_for('login')}}";
+            form.method = "POST";
+            form.submit();
+        } else if (action === "register") {
+            form.action = "{{url_for('register')}}";
+            form.method = "POST";
+            form.submit();
+        }
+    }
+
+</script>
+
+{% endblock %}
