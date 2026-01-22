@@ -2,12 +2,44 @@
 let gridDisplayBtn = document.getElementById("gridDisplayBtn")
 let listDisplayBtn = document.getElementById("listDisplayBtn")
 
-let gridDisplay = document.getElementById("collectionTableGrid")
-let listDisplay = document.getElementById("collectionTableList")
+let listDisplays = document.getElementsByClassName("collectionTableList")
+let gridDisplays = document.getElementsByClassName("collectionTableGrid")
+
+let categorySortBtn = document.getElementById("categorySortBtn")
+let alphSortBtn = document.getElementById("alphSortBtn")
+let timeSortBtn = document.getElementById("timeSortBtn")
+
+// TODO: add docstrings for all of these functions. its confusing as heeellll
+
+sorted_by = "category"
+if (categorySortBtn.disabled == true) {
+    sorted_by = "category"
+} else if (alphSortBtn.disabled == true) {
+    sorted_by = "alphabetical"
+} else if (timeSortBtn.disabled == true) {
+    sorted_by = "time"
+}
+current_view = "list"
+if (gridDisplayBtn.disabled == true) {
+    current_view = "grid"
+} else if (listDisplayBtn.disabled == true) {
+    current_view = "list"
+}
+let sortedByTime = document.getElementsByClassName(`${current_view}-time`)
+let sortedByAlphabetical = document.getElementsByClassName(`${current_view}-alphabetical`)
+let sortedByCategory = document.getElementsByClassName(`${current_view}-category`)
+
+function refreshVariables() {
+    sortedByTime = document.getElementsByClassName(`${current_view}-time`)
+    sortedByAlphabetical = document.getElementsByClassName(`${current_view}-alphabetical`)
+    sortedByCategory = document.getElementsByClassName(`${current_view}-category`)
+}
+refreshVariables()
 
 function gridBtnClicked() {
-    listDisplay.hidden = true;
-    gridDisplay.style.display = "flex";
+    current_view = "grid"
+    refreshVariables()
+    switchViews()
 
     gridDisplayBtn.classList.add("greenBtn");
     if ("blueBtn" in gridDisplayBtn.classList) {
@@ -20,10 +52,10 @@ function gridBtnClicked() {
     listDisplayBtn.classList.remove("greenBtn");
     
 }
-
 function listBtnClicked() {
-    listDisplay.hidden = false;
-    gridDisplay.style.display = "none";
+    current_view = "list"
+    refreshVariables()
+    switchViews()
 
     listDisplayBtn.classList.add("greenBtn");
     if ("blueBtn" in listDisplayBtn.classList) {
@@ -34,6 +66,79 @@ function listBtnClicked() {
 
     gridDisplayBtn.classList.add("blueBtn");
     gridDisplayBtn.classList.remove("greenBtn");
+
+}
+
+function switchViews() {
+    hideGridDisplay()
+    hideListDisplay()
+    if (current_view == "list") {
+        showListDisplay()
+        if (sorted_by == "category") {
+            for (let i = 0; i < sortedByTime.length; i++) {
+                sortedByTime[i].hidden = true;
+            }
+            for (let i = 0; i < sortedByAlphabetical.length; i++) {
+                sortedByAlphabetical[i].hidden = true;
+            }
+            for (let i = 0; i < sortedByCategory.length; i++) {
+                sortedByCategory[i].hidden = false;
+            }
+        } else if (sorted_by == "alphabetical") {
+            for (let i = 0; i < sortedByTime.length; i++) {
+                sortedByTime[i].hidden = true;
+            }
+            for (let i = 0; i < sortedByAlphabetical.length; i++) {
+                sortedByAlphabetical[i].hidden = false;
+            }
+            for (let i = 0; i < sortedByCategory.length; i++) {
+                sortedByCategory[i].hidden = true;
+            }
+        } else if (sorted_by == "time") {
+            for (let i = 0; i < sortedByTime.length; i++) {
+                sortedByTime[i].hidden = false;
+            }
+            for (let i = 0; i < sortedByAlphabetical.length; i++) {
+                sortedByAlphabetical[i].hidden = true;
+            }
+            for (let i = 0; i < sortedByCategory.length; i++) {
+                sortedByCategory[i].hidden = true;
+            }
+        }
+    } else {
+        showGridDisplay()
+        if (sorted_by == "category") {
+            for (let i = 0; i < sortedByTime.length; i++) {
+                sortedByTime[i].style.display = "none";
+            }
+            for (let i = 0; i < sortedByAlphabetical.length; i++) {
+                sortedByAlphabetical[i].style.display = "none";
+            }
+            for (let i = 0; i < sortedByCategory.length; i++) {
+                sortedByCategory[i].style.display = "flex";
+            }
+        } else if (sorted_by == "alphabetical") {
+            for (let i = 0; i < sortedByTime.length; i++) {
+                sortedByTime[i].style.display = "none";
+            }
+            for (let i = 0; i < sortedByAlphabetical.length; i++) {
+                sortedByAlphabetical[i].style.display = "flex";
+            }
+            for (let i = 0; i < sortedByCategory.length; i++) {
+                sortedByCategory[i].style.display = "none";
+            }
+        } else if (sorted_by == "time") {
+            for (let i = 0; i < sortedByTime.length; i++) {
+                sortedByTime[i].style.display = "flex";
+            }
+            for (let i = 0; i < sortedByAlphabetical.length; i++) {
+                sortedByAlphabetical[i].style.display = "none";
+            }
+            for (let i = 0; i < sortedByCategory.length; i++) {
+                sortedByCategory[i].style.display = "none";
+            }
+        }
+    }
 }
 // ------------------------------
 
@@ -42,15 +147,13 @@ function refreshPage() {
 }
 
 // View Toggles
-
-let categorySortBtn = document.getElementById("categorySortBtn")
-let alphSortBtn = document.getElementById("alphSortBtn")
-let timeSortBtn = document.getElementById("timeSortBtn")
 // hiding/showing/resorting collection isnt done here, it's done in python
 // this just controls styling
 
 function categorySortBtnClicked() {
-    console.log("CATEGORY BUTTON")
+    sorted_by = "category"
+    refreshVariables()
+    switchViews()
     categorySortBtn.classList.add("greenBtn")
     if (categorySortBtn.classList.contains("blueBtn")) {
         categorySortBtn.classList.remove("blueBtn")
@@ -63,10 +166,15 @@ function categorySortBtnClicked() {
         alphSortBtn.classList.remove("greenBtn")
         alphSortBtn.classList.add("blueBtn")
     }
-    refreshPage()
+    timeSortBtn.disabled = false;
+    alphSortBtn.disabled = false;
+    categorySortBtn.disabled = true;
+
 }
 function alphSortBtnClicked() {
-    console.log("ALPH BUTTON")
+    sorted_by = "alphabetical"
+    refreshVariables()
+    switchViews()
     alphSortBtn.classList.add("greenBtn")
     if (alphSortBtn.classList.contains("blueBtn")) {
         alphSortBtn.classList.remove("blueBtn")
@@ -79,13 +187,18 @@ function alphSortBtnClicked() {
         categorySortBtn.classList.remove("greenBtn")
         categorySortBtn.classList.add("blueBtn")
     }
-    refreshPage()
+    timeSortBtn.disabled = false;
+    alphSortBtn.disabled = true;
+    categorySortBtn.disabled = false;
+
 }
 function timeSortBtnClicked() {
-    console.log("TIME BUTTON")
-    timeSortBtn.classList.add("greenBtn")
+    sorted_by = "time"
+    refreshVariables()
+    switchViews()
     if (timeSortBtn.classList.contains("blueBtn")) {
         timeSortBtn.classList.remove("blueBtn")
+        timeSortBtn.classList.add("greenBtn")
     }
     if (alphSortBtn.classList.contains("greenBtn")) {
         alphSortBtn.classList.remove("greenBtn")
@@ -95,129 +208,31 @@ function timeSortBtnClicked() {
         categorySortBtn.classList.remove("greenBtn")
         categorySortBtn.classList.add("blueBtn")
     }
-    refreshPage()
+
+    timeSortBtn.disabled = true;
+    alphSortBtn.disabled = false;
+    categorySortBtn.disabled = false;
+
 }
 
-
-// PROFILE EDIT
-// functionality is done in python. this is just editing visibility
-let editProfileBtn = document.getElementById("editProfileBtn")
-let regProfileBtn = document.getElementById("regProfileBtn")
-
-let editBioForm = document.getElementById("editBioForm")
-let currentBio = document.getElementById("currentBio")
-let categoryXButtons = document.getElementsByClassName("deleteCategory")
-
-let deleteCategoriesBtn = document.getElementById("deleteCategoriesBtn")
-let changeColourBtn = document.getElementById("changeColourBtn")
-let deleteTagsBtn = document.getElementById("deleteTagsBtn")
-
-let addNewTagsForm = document.getElementById("addNewTagsForm")
-let submitNewCategoryForm = document.getElementById("submitNewCategoryForm")
-
-let nocategories = document.getElementById("nocategories")
-let notags = document.getElementById("notags")
-
-function switchToEditMode() {
-    regProfileBtn.hidden = false;
-    editProfileBtn.hidden = true;
-    if (deleteCategoriesBtn) {
-        deleteCategoriesBtn.hidden = false;
+function hideListDisplay() {
+    for (let i = 0; i < listDisplays.length; i++) {
+        listDisplays[i].hidden = true;
     }
-    if (changeColourBtn) {
-        changeColourBtn.hidden = false;
-    }
-    if (deleteTagsBtn) {
-        deleteTagsBtn.hidden = false;
-    }
-    if (addNewTagsForm) {
-        addNewTagsForm.hidden = false;
-    }
-
-    if (nocategories) {
-        nocategories.hidden = true;
-    }
-    if (notags) {
-        notags.hidden = true;
-    }
-
-    editBioForm.hidden = false;
-    currentBio.hidden = true;
-    submitNewCategoryForm.hidden = false;
-
-    console.log(categoryXButtons)
-    for (let i = 0; i < categoryXButtons.length ; i++) {
-        categoryXButtons[i].hidden = false;
+}
+function showListDisplay() {
+    for (let i = 0; i < listDisplays.length; i++) {
+        listDisplays[i].hidden = false;
     }
 }
 
-function leaveEditMode() {
-    regProfileBtn.hidden = true;
-    editProfileBtn.hidden = false;
-    if (deleteCategoriesBtn) {
-        deleteCategoriesBtn.hidden = true;
+function hideGridDisplay() {
+    for (let i = 0; i < gridDisplays.length; i++) {
+        gridDisplays[i].style.display = "none";
     }
-    if (changeColourBtn) {
-        changeColourBtn.hidden = true;
-    }
-    if (deleteTagsBtn) {
-        deleteTagsBtn.hidden = true;
-    }
-    if (addNewTagsForm) {
-        addNewTagsForm.hidden = true;
-    }
-
-    if (nocategories) {
-        nocategories.hidden = false;
-    }
-    if (notags) {
-        notags.hidden = false;
-    }
-
-    editBioForm.hidden = true;
-    currentBio.hidden = false;
-    submitNewCategoryForm.hidden = true;
-
-    for (let i = 0; i < categoryXButtons.length; i++) {
-        categoryXButtons[i].hidden = true;
-    }
-
-    refreshPage()
 }
-
-function showTextWidgetOptions() {
-    document.getElementById("newWidgetContent").hidden = false;
-    
-    document.getElementById("newWidgetURL").hidden = true;
-    document.getElementById("newWidgetAlt").hidden = true;
-}
-
-function showImageWidgetOptions() {
-    document.getElementById("newWidgetContent").hidden = true;
-
-    document.getElementById("newWidgetURL").hidden = false;
-    document.getElementById("newWidgetAlt").hidden = false;
-}
-
-// NEW WIDGETS
-
-function addNewWidget() {
-    document.getElementById("newWidgetDiv").hidden = false;
-    document.getElementById("addWidgetButton").hidden = true;
-    document.getElementById("cancelNewWidgetButton").hidden = false;
-}
-
-function cancelNewWidget() {
-    document.getElementById("newWidgetDiv").hidden = true;
-    document.getElementById("addWidgetButton").hidden = false;
-    document.getElementById("cancelNewWidgetButton").hidden = true;
-}
-
-function selectEditCategory(selectedCategory) {
-    console.log("SELECTED", selectedCategory)
-    if (!document.getElementById(`checkbox-${selectedCategory}`).checked) {
-        document.getElementById(selectedCategory).classList.remove("selectedCategory")
-    } else {
-        document.getElementById(selectedCategory).classList.add("selectedCategory")
+function showGridDisplay() {
+    for (let i = 0; i < gridDisplays.length; i++) {
+        gridDisplays[i].style.display = "flex";
     }
 }

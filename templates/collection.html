@@ -53,7 +53,6 @@
     <div id="pageWrap">
         <div id="contentWrap">
             <div id="actionButtons1" class="actionButtons dashed-border">
-                <a class="btn blueBtn" href="#">???</a>
                 <a class="btn purpleBtn" href="{{url_for('logout')}}">LOG OUT</a>
             </div>
             <div id="characterContent" class="dashed-border">
@@ -67,16 +66,16 @@
                     <div id="toggleDisplayButtons">
                         {% if user.profile_info['collectionView'] == "list" %}
                             <button class="btn blueBtn" id="gridDisplayBtn" onclick="gridBtnClicked()">Grid</button>
-                            <button class="btn greenBtn" id="listDisplayBtn" onclick="listBtnClicked()">List</button>
+                            <button class="btn greenBtn" id="listDisplayBtn" onclick="listBtnClicked()" disabled>List</button>
                         {% else %}
-                            <button class="btn greenBtn" id="gridDisplayBtn" onclick="gridBtnClicked()">Grid</button>
+                            <button class="btn greenBtn" id="gridDisplayBtn" onclick="gridBtnClicked()" disabled>Grid</button>
                             <button class="btn blueBtn" id="listDisplayBtn" onclick="listBtnClicked()">List</button>
                         {% endif %}
                     </div>
                     <div id = "sortToggles">
                         {% for sort in [("category", "Category"), ("alph", "A-Z"), ("time", "Time")] %}
                             {% if sort[0] == sorted_by %}
-                                <button type="button" class="btn greenBtn" id="{{sort[0]}}SortBtn" onclick="{{sort[0]}}SortBtnClicked()">{{sort[1]}}</button>
+                                <button type="button" class="btn greenBtn" id="{{sort[0]}}SortBtn" onclick="{{sort[0]}}SortBtnClicked()" disabled>{{sort[1]}}</button>
                             {% else %}
                                 <button type="button" class="btn blueBtn" id="{{sort[0]}}SortBtn" onclick="{{sort[0]}}SortBtnClicked()">{{sort[1]}}</button>
                             {% endif %}
@@ -84,38 +83,48 @@
                     </div>
                 </div>
 
-                {% if user.profile_info['collectionView'] == "list" %}
-                    <table id = "collectionTableList">
-                {% else %}
-                    <table id = "collectionTableList" hidden>
+                {% for sort_mode in ['time', 'alphabetical', 'category']%}
+                    {% if user.profile_info['collectionView'] == "list" %}
+                        {% if sort_mode == sorted_by %}
+                            <table class = "collectionTableList list-{{sort_mode}} {{sort_mode}}">
+                        {% else %}
+                            <table class = "collectionTableList list-{{sort_mode}} {{sort_mode}}" hidden>
+                        {% endif %}
+                    {% else %}
+                        <table class = "collectionTableList list-{{sort_mode}} {{sort_mode}}" hidden>
+                    {% endif %}
 
-                {% endif %}
-                    {% for entry in user['collection'] %}
-                    <tr> 
-                        <td><img src="{{entry['icon_url']}}"></td>
-                        <td> {{entry['name']}} </td>
-                        <td class="categoryTag collectionPage">
-                            <a href="/{{user.username}}">
-                                <h5 class=""
-                                style= "background-color:{{user['categories'][entry['category']]}};
-                                        color:#ffffff;">
-                                {{entry['category']}}</h5>
-                            </a>
-                        </td>
-                        <td> <a class="greenBtn btn" href="/view/{{user.username}}-{{entry['id']}}">VIEW</a></td>
-                    </tr>
+                    {% for entry in sorted_collections[sort_mode] %}
+                        <tr>
+                            <td><img src="{{entry['icon_url']}}"></td>
+                            <td> {{entry['name']}} </td>
+                            <td class="categoryTag collectionPage">
+                                <a href="/{{user.username}}">
+                                    <h5 class=""
+                                    style= "background-color:{{user['categories'][entry['category']]}};
+                                            color:#ffffff;">
+                                    {{entry['category']}}</h5>
+                                </a>
+                            </td>
+                            <td> <a class="greenBtn btn" href="/view/{{user.username}}-{{entry['id']}}">VIEW</a></td>
+                        </tr>
                     {% endfor %}
                 </table>
+                {% endfor %}
 
                 <!-- GRID DISPLAY -->
-                {% if user.profile_info['collectionView'] == "list" %}
-                <div id = "collectionTableGrid" style="display:none;">
-                    
-                {% else %}
-                <div id = "collectionTableGrid">
-                
-                {% endif %}
-                    {% for entry in user['collection'] %}
+                {% for sort_mode in ['time', 'alphabetical', 'category']%}
+                    {% if user.profile_info['collectionView'] == "grid" %}
+                        {% if sort_mode == sorted_by %}
+                            <div class = "collectionTableGrid grid-{{sort_mode}} {{sort_mode}}">
+                        {% else %}
+                            <div class = "collectionTableGrid grid-{{sort_mode}} {{sort_mode}}" style="display:none;">
+                        {% endif %}
+                    {% else %}
+                        <div class = "collectionTableGrid grid-{{sort_mode}} {{sort_mode}}" style="display:none;">
+                    {% endif %}
+
+                    {% for entry in sorted_collections[sort_mode] %}
                         <div class="collectionTableGridItem">
                             <img src="{{entry['icon_url']}}">
                             <h4>{{entry['name']}}</h4>
@@ -123,7 +132,8 @@
                             <a class="greenBtn btn" href="/view/{{user.username}}-{{entry['id']}}">VIEW</a>
                         </div>
                     {% endfor %}
-                </div>
+                    </div>
+                {% endfor %}
                 {% endif %}
                 <br>
                 <hr>
@@ -217,12 +227,11 @@
             </div>
             <div id="actionButtons2" class="actionButtons dashed-border">
                 <span>
-                    <a class="btn blueBtn"href="#">???</a>
                     <a class="btn blueBtn"href="/{{user.username}}">PROFILE</a>
                 </span>
-                <span>
+                <!-- <span>
                     <a class="btn blueBtn"href="#">???</a>
-                </span>
+                </span> -->
             </div>
         </div>
     </div>

@@ -28,7 +28,7 @@
                     <textarea name="editBio" id="editBio" class="textInput largeTextInput">{{user.profile_info['bio']}}</textarea>
                     <p>Basic HTML formatting, such <b>&lt;b&gt; &lt;/b&gt;</b>, <i>&lt;i&gt; &lt;/i&gt;</i>, <u>&lt;u&gt; &lt;/u&gt;</u>, and &lt;br&gt; is allowed for text.</p>
                     <br><br>
-                    <input type="submit" value="Save Bio" name="saveBioBtn" id="saveBioBtn" onclick="switchToEditMode" class="btn greenBtn" />
+                    <input type="submit" value="Save Bio" name="saveBioBtn" id="saveBioBtn" onclick="switchToEditMode()" class="btn greenBtn" />
                 </form>
                 <hr>
                 <br>
@@ -72,7 +72,7 @@
                 <form action="/{{user.username}}" method="POST" name="submitNewCategoryForm" id="submitNewCategoryForm" hidden>
                     <input type="text" name="submitNewCategory" id="submitNewCategory" class="textInput" placeholder="Add a category"/>
                     <input type="color" class="colourpicker" id="submitNewCategoryColour" name="submitNewCategoryColour" value="#ffffffff"/>
-                    <input type="submit" value="Submit" id="submitNewCategoryBtn" onclick="switchToEditMode" class="btn greenBtn" />
+                    <input type="submit" value="Submit" id="submitNewCategoryBtn" onclick="switchToEditMode()" class="btn greenBtn" />
                 </form>
                 <hr>
                 
@@ -119,6 +119,6 @@
             </div>
         </div>
     </div>
-<script src="../static/scripts/collection.js"></script>
+<script src="../static/scripts/profile.js"></script>
 
 {% endblock %}

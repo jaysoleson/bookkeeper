@@ -17,7 +17,8 @@ from scripts.view_profile import profile
 from scripts.view_entry import view_entry
 from scripts.edit_entry import edit_entry
 
-# TODO:
+# TODO: switch all redirects to use url_for()
+# TODO: figure out something to do with the home page
 # - BUG:
 # - - sort buttons styles still not updating sometimes?
 
@@ -169,7 +170,6 @@ def collectionPage():
         return render_template("collection.html", collection=[], user=user)
 
     if request.method == "POST":
-        print("FORM:", request.form)
         if request.form["submitEntryTitle"]:
             # NEW ENTRY
             addNewEntry(request.form, user)
@@ -186,11 +186,20 @@ def collectionPage():
         sorted_by="category"
         if "sorted_by" in user.profile_info:
             sorted_by = user.profile_info["sorted_by"]
+
+        time_collection = getSortedCollection('time', user)
+        alph_collection = getSortedCollection('alphabetical', user)
+        category_collection = getSortedCollection('category', user)
         return render_template(
             "collection.html",
             user=user,
             defaultImages=defaultImages,
-            sorted_by=sorted_by
+            sorted_by=sorted_by,
+            sorted_collections={
+                "time": time_collection,
+                "alphabetical": alph_collection,
+                "category": category_collection
+                } 
             )
 
 # delete an entry
@@ -334,7 +343,6 @@ def addNewEntry(form, user):
     for item in form:
         if item in user.tags:
             entry_tags.append(item)
-    print("TAGS:", entry_tags)
 
     if not entry_name:
         return
@@ -435,71 +443,33 @@ def updateUserFromSession(user=None):
 # SELECTION SORT BUTTONS
 @app.route('/sortCollectionByCategory')
 def sortCollectionByCategory():
-    print ("CATEGORY")
+
     user = User.query.get(session["id"])
-
-    categories = [i for i in user.categories.keys()]
-    category_index = 0
-    sorted_entries = []
-    while category_index <= len(categories) - 1:
-        for entry in user.collection:
-            if entry['category'] == categories[category_index]:
-                sorted_entries.append(entry)
-        category_index += 1
-    
-    user.collection = sorted_entries
     user.profile_info["sorted_by"] = "category"
+
     updateSessionFromUser(user)
-    updateUserFromSession(user)
 
-
-    return redirect("/collection")
+    return redirect("/sort")
 
 @app.route('/sortCollectionByAlphabet')
 def sortCollectionByAlphabet():
-    print ("ALPHABET")
+
     user = User.query.get(session["id"])
-    entry_titles = [entry['name'] for entry in user.collection]
-    entry_titles.sort()
+    user.profile_info["sorted_by"] = "alphabetical"
 
-    sorted_entries = []
-    for name in entry_titles:
-        for entry in user.collection:
-            if entry['name'] == name:
-                sorted_entries.append(entry)
-    
-    user.collection = sorted_entries
-    user.profile_info["sorted_by"] = "alph"
     updateSessionFromUser(user)
-    updateUserFromSession(user)
 
-    return redirect("/collection")
+    return redirect("/sort")
 
 @app.route('/sortCollectionByTime')
 def sortCollectionByTime():
-    print ("TIME")
-    user = User.query.get(session["id"])
-
-    entry_titles = [entry['timeCreated'] for entry in user.collection]
-    entry_titles.sort()
-
-    print("Times:", entry_titles)
-
-    sorted_entries = []
-    for time in entry_titles:
-        for entry in user.collection:
-            if entry['timeCreated'] == time:
-                if entry not in sorted_entries:
-                    sorted_entries.append(entry)
     
-    print("SORTED:", sorted_entries)
-    user.collection = sorted_entries
-
+    user = User.query.get(session["id"])
     user.profile_info["sorted_by"] = "time"
 
     updateSessionFromUser(user)
-    updateUserFromSession(user)
-    return redirect("/collection")
+
+    return redirect("/sort")
 
 @app.route("/listView")
 def listView():
@@ -516,6 +486,35 @@ def gridView():
     updateSessionFromUser(user)
     updateUserFromSession(user)
     return redirect("/collection")
+
+def getSortedCollection(sorted_by, user):
+    collection = []
+    if sorted_by == "alphabetical":
+        entry_titles = [entry['name'] for entry in user.collection]
+        entry_titles.sort()
+
+        for name in entry_titles:
+            for entry in user.collection:
+                if entry['name'] == name:
+                    collection.append(entry)
+    elif sorted_by == "time":
+        entry_titles = [entry['timeCreated'] for entry in user.collection]
+        entry_titles.sort()
+        for time in entry_titles:
+            for entry in user.collection:
+                if entry['timeCreated'] == time:
+                    if entry not in collection:
+                        collection.append(entry)
+    elif sorted_by == "category":
+        categories = [i for i in user.categories.keys()]
+        category_index = 0
+        while category_index <= len(categories) - 1:
+            for entry in user.collection:
+                if entry['category'] == categories[category_index]:
+                    collection.append(entry)
+            category_index += 1
+
+    return collection
 
 # keep all routes above here
 if __name__ in "__main__":
