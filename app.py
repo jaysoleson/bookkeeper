@@ -19,8 +19,7 @@ from scripts.edit_entry import edit_entry
 
 # TODO: switch all redirects to use url_for()
 # TODO: figure out something to do with the home page
-# - BUG:
-# - - sort buttons styles still not updating sometimes?
+# TODO: Remove hover state for disabled buttons
 
 # - change category names and colours
 # - add a collection description for a subtitle on the /collection page
@@ -35,7 +34,7 @@ from scripts.edit_entry import edit_entry
 # - location pin (map embed?)
 
 
-# INFO
+# INFO IN DATABASE LOOKS LIKE:
 # ENTRIES:
 # {
 #     "id": int,
