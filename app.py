@@ -449,7 +449,7 @@ def sortCollectionByCategory():
 
     updateSessionFromUser(user)
 
-    return redirect("/sort")
+    return redirect("/collection")
 
 @app.route('/sortCollectionByAlphabet')
 def sortCollectionByAlphabet():
@@ -459,7 +459,7 @@ def sortCollectionByAlphabet():
 
     updateSessionFromUser(user)
 
-    return redirect("/sort")
+    return redirect("/collection")
 
 @app.route('/sortCollectionByTime')
 def sortCollectionByTime():
@@ -469,7 +469,7 @@ def sortCollectionByTime():
 
     updateSessionFromUser(user)
 
-    return redirect("/sort")
+    return redirect("/collection")
 
 @app.route("/listView")
 def listView():
