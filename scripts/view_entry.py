@@ -1,5 +1,8 @@
 # pylint:disable=invalid-name
 class ViewEntry():
+    """
+    Class responsible for all view entry actions and function.
+    """
     def __init__(self):
         pass
 

@@ -304,7 +304,7 @@ def editEntry(username:str, id:int):
     
     if request.method == "POST":
         for form_submission in request.form:
-            edit_entry.formPOST(form_submission, request.form, user, current_entry)
+            edit_entry.formPOST(form_submission, request.form, current_entry)
 
         updateSessionFromUser(user)
         updateUserFromSession(user)

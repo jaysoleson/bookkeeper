@@ -1,12 +1,20 @@
 # pylint:disable=invalid-name
 class EditEntry():
+    """
+    Class responsible for all edit entry actions.
+    Currently just handles form submission for adding, editing, and deleting.
+    """
     def __init__(self):
         pass
 
-    def formPOST(self, form_submission, form, user, current_entry):
+    def formPOST(self, form_submission, form, current_entry):
+        """
+        Handles all form submissions that come from editing an entry.
+        """
+        print(form_submission)
         if form_submission in ("submitEntryTitle", "submitEntryCategory", "submitEntryIcon", "defaultImage"):
             self.editEntryCoreInfo(form, form_submission, current_entry)
-        elif form_submission in ('new-widget-text-content', 'new-widget-url-content'):
+        elif form_submission in ("new-widget-type"):
             self.addNewWidget(form, current_entry)
         elif "widgetEdit" in form_submission and form[form_submission]:
             self.editWidget(form, form_submission, current_entry)
@@ -53,7 +61,7 @@ class EditEntry():
         new_content = widget_content if widget_content else widget_url
         if not new_content:
             return
-        print("Adding a widget")
+        print("Adding widget:", new_content)
 
         current_entry['widgets'].append(
             {

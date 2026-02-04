@@ -37,6 +37,8 @@ function refreshVariables() {
 refreshVariables()
 
 function gridBtnClicked() {
+    // Function that runs when the view is switched to "grid"
+    // runs helpers and sets the states of the "grid" and "list" buttons
     current_view = "grid"
     refreshVariables()
     switchViews()
@@ -53,6 +55,8 @@ function gridBtnClicked() {
     
 }
 function listBtnClicked() {
+    // Function that runs when the view is switched to "list"
+    // runs helpers and sets the states of the "grid" and "list" buttons
     current_view = "list"
     refreshVariables()
     switchViews()
@@ -70,6 +74,7 @@ function listBtnClicked() {
 }
 
 function switchViews() {
+    // resets the display and shows the right ones based on local variables
     hideGridDisplay()
     hideListDisplay()
     if (current_view == "list") {
@@ -142,10 +147,6 @@ function switchViews() {
 }
 // ------------------------------
 
-function refreshPage() {
-    window.location.reload();
-}
-
 // View Toggles
 // hiding/showing/resorting collection isnt done here, it's done in python
 // this just controls styling
@@ -169,8 +170,8 @@ function categorySortBtnClicked() {
     timeSortBtn.disabled = false;
     alphSortBtn.disabled = false;
     categorySortBtn.disabled = true;
-
 }
+
 function alphSortBtnClicked() {
     sorted_by = "alphabetical"
     refreshVariables()
@@ -212,7 +213,6 @@ function timeSortBtnClicked() {
     timeSortBtn.disabled = true;
     alphSortBtn.disabled = false;
     categorySortBtn.disabled = false;
-
 }
 
 function hideListDisplay() {
@@ -225,7 +225,6 @@ function showListDisplay() {
         listDisplays[i].hidden = false;
     }
 }
-
 function hideGridDisplay() {
     for (let i = 0; i < gridDisplays.length; i++) {
         gridDisplays[i].style.display = "none";
